@@ -31,6 +31,7 @@ public class Parser {
 	 private String Url = new String();
 	 private String UrlD = new String();
 	 private String File_data = new String();
+	 private String[] Atribute = new String[]{};
 	 private List<Data_Model> Data_set =new ArrayList<Data_Model>();
 	 
 	 public Parser(String url, String file_data,String[]dir_attribute,
@@ -49,13 +50,16 @@ public class Parser {
 		this.File_data = "";
 		
 	}
-
-	public String getFile() {
+    
+	
+	public String getUrl() {
 		return this.Url;
 	}
 
-	protected void setFile(String url) {
-		this.Url = url;
+	protected void setUrl(String url) {
+		if(this.Data_set.isEmpty()) {
+			this.Url = url;
+		}
 	}
 
 	public String getUrlD() {
@@ -63,7 +67,9 @@ public class Parser {
 	}
 
 	protected void setUrlD(String urlD) {
-		this.UrlD = urlD;
+		if(this.Data_set.isEmpty() && this.Url.contentEquals("")) {
+			this.UrlD = urlD;
+		}
 	}
 	
 	public String getFile_data() {
@@ -71,17 +77,33 @@ public class Parser {
 	}
 
 	protected void setFile_data(String file_data) {
-		this.File_data = file_data;
+		if(this.Data_set.isEmpty()) {
+			this.File_data = file_data;
+		}
 	}
 
 	public List<Data_Model> getData_set() {
 		return Data_set;
 	}
 
-	protected void setData_set(List<Data_Model> data_set) {
-		this.Data_set = data_set;
+	protected void setData_set(String[]dir_attribute,String item_attribute,String item) {
+		if (!this.Url.contentEquals("") && !this.File_data.contentEquals("")) {
+			load_file(this.Url,this.File_data,dir_attribute,item_attribute,item,"url"); 
+			this.Data_set = processing(this.File_data);
+		} else if (!this.File_data.contentEquals("") && !this.UrlD.contentEquals("")) {
+			try {
+				download(this.UrlD,this.File_data );
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			this.Data_set = processing(this.File_data);
+		}
 	}
-    
+	
+	public String[] getAtribute() {
+		return Atribute;
+	}
+
 	private String url_json(String url) throws Exception{
 		 URLConnection openConnection = new URL(url).openConnection();
 	     openConnection.addRequestProperty("User-Agent", Browser);
@@ -192,6 +214,9 @@ public class Parser {
 						   Standard_Error_of_modelled_annual_expenditure); 
 				   temp.add(app);
 				      } 
+				   if (i==0) {
+					    this.Atribute=line.split(COMMA_DELIMITER);
+				   }
 				   i++;
 			   }
 			if(i!=1)stream.close();
