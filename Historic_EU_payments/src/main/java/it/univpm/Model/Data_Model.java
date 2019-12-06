@@ -49,9 +49,9 @@ public class Data_Model {
 		this.Standard_Deviation_of_annual_expenditure = standard_Deviation_of_annual_expenditure;
 		this.Standard_Error_of_modelled_annual_expenditure = standard_Error_of_modelled_annual_expenditure;
 	}
+	
 
-
-	protected String getCountry() {
+	public String getCountry() {
 		return Country;
 	}
 
@@ -61,7 +61,7 @@ public class Data_Model {
 	}
 
 
-	protected String getNUTS1_ID() {
+	public String getNUTS1_ID() {
 		return NUTS1_ID;
 	}
 
@@ -71,7 +71,7 @@ public class Data_Model {
 	}
 
 
-	protected String getNUTS2_ID() {
+	public String getNUTS2_ID() {
 		return NUTS2_ID;
 	}
 
@@ -80,8 +80,8 @@ public class Data_Model {
 		NUTS2_ID = nUTS2_ID;
 	}
 
-    
-	protected String getNUTS2_name() {
+
+	public String getNUTS2_name() {
 		return NUTS2_name;
 	}
 
@@ -91,7 +91,7 @@ public class Data_Model {
 	}
 
 
-	protected String getFund() {
+	public String getFund() {
 		return Fund;
 	}
 
@@ -101,7 +101,7 @@ public class Data_Model {
 	}
 
 
-	protected int getYear() {
+	public int getYear() {
 		return Year;
 	}
 
@@ -111,7 +111,7 @@ public class Data_Model {
 	}
 
 
-	protected int[] getProgramming_Period() {
+	public int[] getProgramming_Period() {
 		return Programming_Period;
 	}
 
@@ -121,7 +121,7 @@ public class Data_Model {
 	}
 
 
-	protected int getEU_Payment_annual() {
+	public int getEU_Payment_annual() {
 		return EU_Payment_annual;
 	}
 
@@ -131,7 +131,7 @@ public class Data_Model {
 	}
 
 
-	protected int getModelled_annual_expenditure() {
+	public int getModelled_annual_expenditure() {
 		return Modelled_annual_expenditure;
 	}
 
@@ -141,7 +141,7 @@ public class Data_Model {
 	}
 
 
-	protected int getStandard_Deviation_of_annual_expenditure() {
+	public int getStandard_Deviation_of_annual_expenditure() {
 		return Standard_Deviation_of_annual_expenditure;
 	}
 
@@ -151,7 +151,7 @@ public class Data_Model {
 	}
 
 
-	protected int getStandard_Error_of_modelled_annual_expenditure() {
+	public int getStandard_Error_of_modelled_annual_expenditure() {
 		return Standard_Error_of_modelled_annual_expenditure;
 	}
 
@@ -172,7 +172,42 @@ public class Data_Model {
 				+ getStandard_Error_of_modelled_annual_expenditure() + "]";
 	}
     
-    
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Data_Model other = (Data_Model) obj;
+		
+		
+		
+		if (!Country.equals(other.Country) & !Country.equals(""))
+			return false;
+		
+	    if (!Fund.equals(other.Fund)& !Fund.equals(""))
+			return false;
+		
+		 if (!NUTS1_ID.equals(other.NUTS1_ID) & !NUTS1_ID.equals(""))
+			return false;
+		
+		 if (!NUTS2_ID.equals(other.NUTS2_ID) & !NUTS2_ID.equals(""))
+			return false;
+		
+		if (!NUTS2_name.equals(other.NUTS2_name) & !NUTS2_name.equals(""))
+			return false;
+		
+		int []r ={0,0} ;
+		if (!Arrays.equals(Programming_Period, other.Programming_Period) & !Arrays.equals(Programming_Period,r) ) 
+			return false;
+		
+		if (Year != other.Year & Year != 0)
+			return false;
+		
+		return true;
+	}
     
     
 }
