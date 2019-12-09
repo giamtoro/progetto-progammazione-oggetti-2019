@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,15 +25,13 @@ import org.json.simple.parser.ParseException;
 
 import it.univpm.Model.Data_Model;
 
-public class Parser {
+public class Parser extends Data_set{
 	 private final  static String COMMA_DELIMITER = "\\t";
 	 private final  static String Browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
 	 
 	 private String Url = new String();
 	 private String UrlD = new String();
 	 private String File_data = new String();
-	 private String[] Atribute = new String[]{};
-	 private List<Data_Model> Data_set =new ArrayList<Data_Model>();
 	 
 	 public Parser(String url, String file_data,String[]dir_attribute,
 			 String item_attribute,String item) {
@@ -40,68 +39,19 @@ public class Parser {
 			this.Url = url;
 			this.File_data= file_data;
 			load_file(this.Url,this.File_data,dir_attribute,item_attribute,item,"url"); 
-			this.Data_set = processing(this.File_data);
+			this.setData(processing(this.File_data));
 		  }	
-	 
-	public Parser() {
-		super();
-		this.Url = "";
-		this.UrlD = "";
-		this.File_data = "";
-		
-	}
-    
-	
+
 	public String getUrl() {
 		return this.Url;
 	}
-
-	protected void setUrl(String url) {
-		if(this.Data_set.isEmpty()) {
-			this.Url = url;
-		}
-	}
-
+	
 	public String getUrlD() {
 		return UrlD;
 	}
 
-	protected void setUrlD(String urlD) {
-		if(this.Data_set.isEmpty() && this.Url.contentEquals("")) {
-			this.UrlD = urlD;
-		}
-	}
-	
 	public String getFile_data() {
 		return this.File_data;
-	}
-
-	protected void setFile_data(String file_data) {
-		if(this.Data_set.isEmpty()) {
-			this.File_data = file_data;
-		}
-	}
-
-	public List<Data_Model> getData_set() {
-		return Data_set;
-	}
-
-	protected void setData_set(String[]dir_attribute,String item_attribute,String item) {
-		if (!this.Url.contentEquals("") && !this.File_data.contentEquals("")) {
-			load_file(this.Url,this.File_data,dir_attribute,item_attribute,item,"url"); 
-			this.Data_set = processing(this.File_data);
-		} else if (!this.File_data.contentEquals("") && !this.UrlD.contentEquals("")) {
-			try {
-				download(this.UrlD,this.File_data );
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			this.Data_set = processing(this.File_data);
-		}
-	}
-	
-	public String[] getAtribute() {
-		return Atribute;
 	}
 
 	private String url_json(String url) throws Exception{
@@ -168,7 +118,7 @@ public class Parser {
 			 
 	     }
 		   
-    }
+   }
 			   
 	@SuppressWarnings("unused")
 	private static void download(String url, String fileName) throws Exception {
@@ -215,7 +165,7 @@ public class Parser {
 				   temp.add(app);
 				      } 
 				   if (i==0) {
-					    this.Atribute=line.split(COMMA_DELIMITER);
+					    this.setAttribute_Data(line.split(COMMA_DELIMITER));
 				   }
 				   i++;
 			   }
@@ -228,6 +178,22 @@ public class Parser {
 		}
 		return temp;
 	}
+
+	@Override
+	public Map<String, Map<String, ?>> get_Model() {
+		Probability_Model app = new Probability_Model(this.getData(),this.getAttribute_Data(),new Data_Model());
+		return app.get_Model();
+	}
+
+	@Override
+	public  List<Data_Model> set_Model(Data_Model filter) {
+		Probability_Model app = new Probability_Model(this.getData(),this.getAttribute_Data());
+		return app.set_Model(filter);
+
+	}
+
+   
+
 	 
 }
 

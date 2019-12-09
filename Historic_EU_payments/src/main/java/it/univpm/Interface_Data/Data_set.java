@@ -3,6 +3,7 @@ package it.univpm.Interface_Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import it.univpm.Model.Data_Model;
 
@@ -26,18 +27,26 @@ public abstract class Data_set {
 		
 	}
 	
-	
-	
-	protected List<List<Integer>> getD_int() {
-		return d_int;
+	public Data_set() {
+	   this.Data = new ArrayList<Data_Model>();
+	   this.Attribute_Data = new String[]{};
+		
+		
 	}
-
-
-
+	
+	
+	
 	protected void setD_int(List<List<Integer>> d_int) {
 		this.d_int = d_int;
 	}
 
+	protected void setD_str(List<List<String>> d_str) {
+		this.d_str = d_str;
+	}
+
+	protected List<List<Integer>> getD_int() {
+		return d_int;
+	}
 
 
 	protected List<List<String>> getD_str() {
@@ -45,24 +54,26 @@ public abstract class Data_set {
 	}
 
 
-
-	protected void setD_str(List<List<String>> d_str) {
-		this.d_str = d_str;
-	}
-
-
-
-	protected String[] getAttribute_Data() {
+	public String[] getAttribute_Data() {
 		
 		return Attribute_Data;
 	}
 
-	
-	protected List<Data_Model> getData() {
+	public List<Data_Model> getData() {
 		return Data;
 	}
 
+	protected void setData(List<Data_Model> data) {
+		Data = data;
+	}
 
+	protected void setAttribute_Data(String[] attribute_Data) {
+		Attribute_Data = attribute_Data;
+	}
+    
+	abstract public  Map<String,Map<String,?>> get_Model();
+	
+	abstract public  List<Data_Model> set_Model(Data_Model filter);
 	
 	protected List<Data_Model> get_data (List<Data_Model> data ,Data_Model in ) {
 		List<Data_Model> ris = new ArrayList<Data_Model>();
@@ -97,9 +108,11 @@ public abstract class Data_set {
 	}
 	
 	
-	abstract public  List<Data> get_Model();
+	
 	
      
      
 }
+
+
 
