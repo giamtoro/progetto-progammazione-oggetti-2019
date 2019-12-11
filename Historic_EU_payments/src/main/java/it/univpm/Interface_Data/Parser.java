@@ -22,9 +22,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
+import org.springframework.stereotype.Component;
 
 import it.univpm.Model.Data_Model;
 
+@Component("Parser")
 public class Parser extends Data_set{
 	 private final  static String COMMA_DELIMITER = "\\t";
 	 private final  static String Browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
@@ -41,6 +43,13 @@ public class Parser extends Data_set{
 			load_file(this.Url,this.File_data,dir_attribute,item_attribute,item,"url"); 
 			this.setData(processing(this.File_data));
 		  }	
+	 
+	 public Parser() {
+		    super();
+			this.Url = "";
+			this.File_data= ""; 
+			this.setData(new ArrayList<Data_Model>());
+		  }
 
 	public String getUrl() {
 		return this.Url;
@@ -75,7 +84,7 @@ public class Parser extends Data_set{
 			String item_attribute, String item, String attribute_return)   {
 	     if(!url.isEmpty() && !file_data.isEmpty()) {
 			 try {
-			     String data = url_json(url);
+				 String data = url_json(url);
 				 JSONObject obj = (JSONObject)JSONValue.parseWithException(data);
 				 int i =1;
 				 boolean T = true;

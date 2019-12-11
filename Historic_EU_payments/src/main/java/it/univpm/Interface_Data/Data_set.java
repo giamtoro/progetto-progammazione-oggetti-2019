@@ -44,12 +44,12 @@ public abstract class Data_set {
 		this.d_str = d_str;
 	}
 
-	protected List<List<Integer>> getD_int() {
+	public List<List<Integer>> getD_int() {
 		return d_int;
 	}
 
 
-	protected List<List<String>> getD_str() {
+	public List<List<String>> getD_str() {
 		return d_str;
 	}
 
