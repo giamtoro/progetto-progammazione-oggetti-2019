@@ -27,6 +27,9 @@ public class View_Controller {
 	private  final String it_at = "format";
 	private  final String Format = "http://publications.europa.eu/resource/authority/file-type/TSV";
 	private  final String acceptable = "http://data.europa.eu/euodp/data/api/3/action/";
+	private  final String[]discrition = {"nazione di provenienza","ID nazione","ID regione","nome regione","fondo","anno",
+			"periodo progammato","pagamrto annuale EU","Spesa annua modellata","Deviazione standard della spesa annuale",
+			"Errore standard della spesa annuale modellata"};
 	
 	public List<Data_Model> data = new ArrayList<Data_Model>();
 	
@@ -36,25 +39,11 @@ public class View_Controller {
 	@Autowired
 	private Probability_Model F;
 	
-	public Map<String,String>  set_data(String Url) {
+	public Map<String,Map<String,String>>  set_data(String Url) {
 		
 		if (Url.substring(0,acceptable.length()).contentEquals(acceptable)) {
-			Map<String,String>  Attribute = new HashMap<String,String>();
-		    this.D=new Parser(Url,"data.tsv",dir,it_at,Format);
-		    int o =0;
-	    	for (String f : this.D.getAttribute_Data()) {
-	    		if(o<=4) {
-		    		Attribute.put(f,"String");
-		    	} else if (f.contentEquals("Year") & o==5) {
-		    		Attribute.put(f,"int");
-		    	} else if (f.contentEquals("Programming_Period") & o==6) {
-		    		Attribute.put(f,"int[]");
-	    		} else {
-		    		Attribute.put(f,"int");
-		    	}
-		    	o++;
-    		}
-	    	return  Attribute;
+		    this.D=new Parser(Url,"data.tsv",dir,it_at,Format); 
+             return D_metadata();
 	    } else if (Url.contains("") | Url.length()<acceptable.length()) throw new ResponseStatusException(HttpStatus.LENGTH_REQUIRED);
 	    else throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
 	}
@@ -65,8 +54,8 @@ public class View_Controller {
 	}
 	
 	@Bean
-	public String[] get_metadata() {
-			return  this.D.getAttribute_Data();
+	public Map<String,Map<String,String>> get_metadata() {
+			return D_metadata();
 	}
 
 	
@@ -89,7 +78,7 @@ public class View_Controller {
 	
 	@Bean
 	public List<Data_Model> filtered_data() {
-			return  this.F.getData();
+			return  this.F.get_Data();
 	}
 	
 	public Map<String, Map<String, ?>> all_Filtered_Model() {
@@ -101,7 +90,7 @@ public class View_Controller {
 	
 
 	public List<Data_Model> filtered_data_tmp(Data_Model in){
-		List<Data_Model> d=this.D.set_Model(in);
+		List<Data_Model> d = this.D.set_Model(in);
 		if (!in.equals(new Data_Model()) | !this.D.getData().isEmpty() |!(this.D.getData().size()==d.size()) ) {
 			return  d;
 		} else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -128,29 +117,36 @@ public class View_Controller {
 		return ret;
 	}
 	
-    public Boolean control_model(String param) {
-    	Boolean T =true;
-    	if(!param.contentEquals("")) {
-    		JSONObject obj = null;
-    		try {
-    			obj = (JSONObject) JSONValue.parseWithException(param);
-    			for(String at :D.getAttribute_Data()) {
-    				if (obj.containsKey(at) & T) {
-    					T=true;
-    				} else T=false;
-    			}
-    		} catch (ParseException e) {
-    			System.out.println(e.getMessage());
-    			T=false;
-    		} catch (Exception e) {
-				 System.out.println(e.getMessage());
-				 T=false;
-			}
-    		
-    	}
-		return T;
+  
+    public Map<String,Map<String,String>> D_metadata(){
+    	Map<String,Map<String,String>>  Attribute = new HashMap<String,Map<String,String>>();
+	    int o =0;
+    	for (String f : this.D.getAttribute_Data()) {
+    		if(o<=4) {
+    			Map<String,String> app =  new HashMap<String,String>();
+    		    app.put("type", "String");
+    		    app.put("descrizione", discrition[o]);
+    		    Attribute.put(f,app);
+	    	} else if (f.contentEquals("Year") & o==5) {
+	    		Map<String,String> app =  new HashMap<String,String>();
+    		    app.put("type", "int");
+    		    app.put("descrizione", discrition[o]);
+    		    Attribute.put(f,app);
+	    	} else if (f.contentEquals("Programming_Period") & o==6) {
+	    		Map<String,String> app =  new HashMap<String,String>();
+    		    app.put("type", "int[]");
+    		    app.put("descrizione", discrition[o]);
+    		    Attribute.put(f,app);
+    		} else {
+    			Map<String,String> app =  new HashMap<String,String>();
+    		    app.put("type", "int");
+    		    app.put("descrizione", discrition[o]);
+    		    Attribute.put(f,app);
+	    	}
+	    	o++;
+		}
+    	return  Attribute;
     }
-
 	
 
 	 

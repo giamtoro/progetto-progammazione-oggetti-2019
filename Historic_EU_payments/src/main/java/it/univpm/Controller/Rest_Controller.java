@@ -28,14 +28,15 @@ public class Rest_Controller {
 	
 
 	@RequestMapping(value = "/set_data", method = RequestMethod.GET)
-	public Map<String, String>  set(@RequestParam(value="Url",defaultValue ="") String Url) {
-		Map<String, String> d = new HashMap <String, String>();
+	public Map<String,Map<String,String>>  set(@RequestParam(value="Url",defaultValue ="") String Url) {
+		Map<String,Map<String,String>> d = new HashMap <String, Map<String,String>>();
 		 d =data.set_data(Url);
 		return d;
 	}
 	
 	@RequestMapping(value = "/get_metadata", method = RequestMethod.GET)
-	public String[]  metadata() {
+	public Map<String,Map<String,String>>  metadata() {
+		Map<String,Map<String,String>> d = new HashMap <String, Map<String,String>>();
 		return data.get_metadata();
 	}
 	
