@@ -11,112 +11,150 @@ import java.util.HashMap;
 import it.univpm.Model.Data_Model;
 
 
+/** 
 
+ * @author gianmarco troni
+ *
+ */
 
 @Component("Probability_Model")
+/** 
+ * annotazione di spring che scansiona la classe
+ */
 public class Probability_Model  extends Data_set{
 
 
 	 private int n;
 	 private Data_Model filter =new Data_Model();
 	 private List<Data_Model> data = new ArrayList<Data_Model>();
+	 /** 
+	     *  @param  private int n;
+	     *  @param  private Data_Model filter =new Data_Model();
+	     *  @param   private List<Data_Model> data = new ArrayList<Data_Model>();
+	     *  dati classe astratta
+	     *  @param private List<Data_Model> Data
+          * @param  private String[] Attribute_Data
+	     */
 	 
 	 public Probability_Model( List<Data_Model> Data,String[] attribute ,Data_Model in) {
 			super(Data,attribute);
-			this.setData(Data);
-			this.setAttribute_Data(attribute);
-			this.data=get_data(Data, in);
-			this.filter=in;
-			this.n=this.data.size();
+			this.setData(Data);// settagio dataset completo
+			this.setAttribute_Data(attribute);// settagio atributi dataset
+			this.data=get_data(Data, in); //filtraggio dati
+			this.filter=in; //filtro
+			this.n=this.data.size();//settagi dimensione
 		}
+	 /** 
+	     * costruttore del  processo del modello dei dati
+	     * legato una  classe astratta Data_Set
+	     * @param String[] attribute_data
+	     * @param List<Data_Model> Data
+	     * @param Data_Model in
+	     */
 		
 	 public Probability_Model( List<Data_Model> Data,String[] attribute ) {
 			super(Data,attribute);
 			this.n=0;
 		}
+	 /** 
+	     * costruttore del  processo del modello dei dati 
+	     * ingresso solo daset completo
+	     * legato una  classe astratta Data_Set
+	     * @param String[] attribute_data
+	     * @param List<Data_Model> Data
+	     */
 		
 	public Probability_Model() {
 			super();
 			this.n=0;
 		}
+	/** 
+     * costruttore dati vuoti getter
+     */
 	
 	public int getN() {
 		return n;
 	}
+	 /** 
+     * dimensione dati filtrati getter
+     * @return int
+     */
 	
 	protected Data_Model getFilter() {
 		return filter;
 	}
+	/** 
+     * modello di filtro getter
+     * @return Data_Model
+     */
+	
 	
 	public List<Data_Model> get_Data() {
 		return data;
 	}
-	
-	public  List<Data_Model> set_Model(Data_Model in) {
-		List<Data_Model> ris = new ArrayList<Data_Model>();
-		if(n==0 & this.data.isEmpty() & this.filter.equals(new Data_Model()) 
-				& !in.equals(new Data_Model())) {
-			this.data = this.get_data(this.getData(), in);
-		    this.filter = in;
-	    	this.n = this.data.size();
-		}
-		ris=this.data;
-		return ris;
-	}
-	
+	/** 
+     * datset filtrato getter
+     * @return Data_Model
+     */
+
 	private Map<String,Map<String,?>> set_data(List<List<Integer>> d_set){
-		Map<String,Map<String,?>> ris = new HashMap<String,Map<String,?>>();
+		Map<String,Map<String,?>> ris = new HashMap<String,Map<String,?>>();//mappa che ritonerà la funzione
 		int o =0;
 		int j =0;
 		int i =0;
-	    for( String at : this.getAttribute_Data()) {
-	        if(o>4 & o<=this.getAttribute_Data().length-1) {
+	    for( String at : this.getAttribute_Data()) { //cicli degli atributi
+	        if(o>4 & o<=this.getAttribute_Data().length-1) {//atributi di tipo in e in[]
 	        	j =i+o-5;
 	        	if( at.contentEquals("Year") & (this.filter.getYear()==0)) {
 	        		Map<String,Integer> app =new HashMap<String,Integer>();
-	        		app.put("mean", (int)this.mean(d_set.get(j), 0));
-	        		app.put("min", (int)this.min(d_set.get(j), 0));
-	        		app.put("max", (int)this.max(d_set.get(j), 0));
-	        		app.put("std", (int)this.std(d_set.get(j), 0));
-	        		app.put("count", getN());
+	        		app.put("mean", (int)this.mean(d_set.get(j), 0));//media
+	        		app.put("min", (int)this.min(d_set.get(j), 0));//minimo
+	        		app.put("max", (int)this.max(d_set.get(j), 0));//massimo
+	        		app.put("std", (int)this.std(d_set.get(j), 0));//derivata standard
+	        		app.put("count", getN());//numero elementi
 	        		ris.put(at, app);
 	        	} else if(at.contentEquals("Programming_Period") & (this.filter.getProgramming_Period()[0]==0 &
 	        			this.filter.getProgramming_Period()[1]==0)) {
 	        		Map<String,List<?>> app =new HashMap<String,List<?>>();
+	        		//conto il numero di elemnti unici
 	        		List<Map<List<Integer>,Integer>> F=count_intv(this.getD_int(),0);
 	        		app.put("count",  F);
+	        		//minimo
 	        		List<Integer> intv_m = new ArrayList<Integer>();
 	        		intv_m.add((int)this.min(d_set.get(j), 0));
 	        		intv_m.add((int)this.min(d_set.get(j+1), 0));
+	        		//massimo
 	        		List<Integer> intv_M = new ArrayList<Integer>();
-	        		intv_M.add((int)this.max(d_set.get(j), 0));
-	        		intv_M.add((int)this.max(d_set.get(j+1), 0));
+	        		intv_M.add((int)this.max(d_set.get(j), 0));//minimo
+	        		intv_M.add((int)this.max(d_set.get(j+1), 0));//minimo
 	        		app.put("min", intv_m);
 	        		app.put("max", intv_M);
 	        		ris.put(at, app);
-	        		i++;
+	        		i++;//il su dataset di Programming_Period è compsto da due liste 
+	        		// faccio un iterazione in più 
 	        	} else if(at.contentEquals("Standard_Deviation_of_annual_expenditure")) {
 	        		Map<String,Integer> app =new HashMap<String,Integer>();
-	        		app.put("mean", (int)this.mean(d_set.get(j), 0));
-	        		app.put("min", (int)this.min(d_set.get(j), 0));
-	        		app.put("max", (int)this.max(d_set.get(j), 0));
-	        		app.put("std", (int)this.std(d_set.get(j), 0));
-	        		app.put("count", getN());
+	        		app.put("mean", (int)this.mean(d_set.get(j), 0));//media
+	        		app.put("min", (int)this.min(d_set.get(j), 0));//minimo
+	        		app.put("max", (int)this.max(d_set.get(j), 0));//massimo
+	        		app.put("std", (int)this.std(d_set.get(j), 0));//derivata standard
+	        		app.put("count", getN());//numero elementi
 	        		ris.put(at, app);
 	        	} else if (j>=2){
 	        		Map<String,Integer> app =new HashMap<String,Integer>();
-	        		app.put("mean", (int)this.mean(d_set.get(j), 0));
-	        		app.put("min", (int)this.min(d_set.get(j), 0));
-	        		app.put("max", (int)this.max(d_set.get(j), 0));
-	        		app.put("std", (int)this.std(d_set.get(j), 0));
-	        		app.put("sum", (int)this.sum(d_set.get(j), 0));
-	        		app.put("count", getN());
+	        		app.put("mean", (int)this.mean(d_set.get(j), 0));//media
+	        		app.put("min", (int)this.min(d_set.get(j), 0));//minimo
+	        		app.put("max", (int)this.max(d_set.get(j), 0));//massimo
+	        		app.put("std", (int)this.std(d_set.get(j), 0));//derivata standard
+	        		app.put("sum", (int)this.sum(d_set.get(j), 0));//somma
+	        		app.put("count", getN());//numero elementi
 	        		ris.put(at, app);
 	        	}
 	        	
 	        } else {
 	        	Map<String,List<?>> app =new HashMap<String,List<?>>();
 	        	List<Map<String,Integer>> c_str=count(this.getD_str(),o,0);
+	        	//conto il numero di elemnti unici
 	        	app.put("count", c_str);
 	        	ris.put(at, app);
 	        }
@@ -124,6 +162,11 @@ public class Probability_Model  extends Data_set{
 	    }
 		return ris;
 	}
+	/** 
+     * funzione che crea il modello di dato
+     * @param List<List<Integer>> d_set
+     * @return Map<String,Map<String,?>>
+     */
 	
    public  Map<String,Map<String,?>> get_Model(){
    	Data_Model in =this.getFilter();
