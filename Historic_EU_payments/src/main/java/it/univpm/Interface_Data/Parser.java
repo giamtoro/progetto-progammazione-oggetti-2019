@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -16,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -64,7 +66,8 @@ public class Parser extends Data_set{
 	}
 
 	private String url_json(String url) throws Exception{
-		 URLConnection openConnection = new URL(url).openConnection();
+		 URL conn1=new URL(url);
+		 URLConnection openConnection =conn1.openConnection();
 	     openConnection.addRequestProperty("User-Agent", Browser);
 		 InputStream in = openConnection.getInputStream();
 		 String data = "";
@@ -77,11 +80,13 @@ public class Parser extends Data_set{
 		    } finally {
 			  in.close();
 		    }
+		 
 		 return data;
 	}
 	
 	public void load_file(String url ,String file_data, String[] dir_attribute , 
 			String item_attribute, String item, String attribute_return)   {
+
 	     if(!url.isEmpty() && !file_data.isEmpty()) {
 			 try {
 				 String data = url_json(url);
@@ -120,9 +125,9 @@ public class Parser extends Data_set{
 					 }
 				 }
 			 } catch (ParseException e) {
-				  e.printStackTrace();
+				  e.printStackTrace();//
 			 } catch (Exception e) {
-			     e.printStackTrace();
+			     e.printStackTrace();//
 			 }
 			 
 	     }

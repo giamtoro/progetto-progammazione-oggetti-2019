@@ -23,6 +23,8 @@ public class Probability_Model  extends Data_set{
 	 
 	 public Probability_Model( List<Data_Model> Data,String[] attribute ,Data_Model in) {
 			super(Data,attribute);
+			this.setData(Data);
+			this.setAttribute_Data(attribute);
 			this.data=get_data(Data, in);
 			this.filter=in;
 			this.n=this.data.size();
@@ -43,7 +45,7 @@ public class Probability_Model  extends Data_set{
 
 		}
 	
-	protected int getN() {
+	public int getN() {
 		return n;
 	}
 	
@@ -85,18 +87,17 @@ public class Probability_Model  extends Data_set{
 	        		ris.put(at, app);
 	        	} else if(at.contentEquals("Programming_Period") & (this.filter.getProgramming_Period()[0]==0 &
 	        			this.filter.getProgramming_Period()[1]==0)) {
+	        		Map<String,List<?>> app =new HashMap<String,List<?>>();
+	        		List<Map<List<Integer>,Integer>> F=count_intv(this.getD_int(),0);
+	        		app.put("count",  F);
 	        		List<Integer> intv_m = new ArrayList<Integer>();
 	        		intv_m.add((int)this.min(d_set.get(j), 0));
 	        		intv_m.add((int)this.min(d_set.get(j+1), 0));
 	        		List<Integer> intv_M = new ArrayList<Integer>();
 	        		intv_M.add((int)this.max(d_set.get(j), 0));
 	        		intv_M.add((int)this.max(d_set.get(j+1), 0));
-	        		Map<String,List<Integer>> app =new HashMap<String,List<Integer>>();
 	        		app.put("min", intv_m);
 	        		app.put("max", intv_M);
-	        		List<Integer> c = new ArrayList<Integer>();
-	        		c.add(getN());
-	        		app.put("count", c);
 	        		ris.put(at, app);
 	        		i++;
 	        	} else if (j>=2){
@@ -110,6 +111,11 @@ public class Probability_Model  extends Data_set{
 	        		ris.put(at, app);
 	        	}
 	        	
+	        } else {
+	        	Map<String,List<?>> app =new HashMap<String,List<?>>();
+	        	List<Map<String,Integer>> c_str=count(this.getD_str(),o,0);
+	        	app.put("count", c_str);
+	        	ris.put(at, app);
 	        }
 	    	o++;
 	    }
@@ -163,20 +169,71 @@ public class Probability_Model  extends Data_set{
    }
    	
 
-   
-   
-   @SuppressWarnings("unused")
-	private int count_intv(List<int[]> dataSet,int[] sel, int s) {
-   	int count =0;
+   private List<Map<String,Integer>> count(List<List<String>> dataSet,int sel, int s) {
+	   List<Map<String,Integer>> ris = new ArrayList <Map<String,Integer>>();   
    	if (s<this.n-1 | s>0 | this.n>0) {
 			if(s==0)s=this.n-1;
 			for(int i=0;i<=s;i++) {
-				if(dataSet.get(i)[0]>=sel[0] & dataSet.get(i)[1]<=sel[1] ) {
-					count++;
+				String el=dataSet.get(i).get(sel);
+                boolean A = true;
+				if (!ris.isEmpty() & ris.size()>1) {
+					for( int j=0;j<=ris.size()-1;j++) {
+				   	if(ris.get(j).containsKey(el)) {
+				    	int old = ris.get(j).get(el);
+				    	ris.get(j).replace(el,old+1);
+				    	A=false;
+				   	  }
+				  	}
+				  } else if (!ris.isEmpty() & ris.size()==1) {
+				  if(ris.get(0).containsKey(el)) {
+				    	int old = ris.get(0).get(el);
+				    	ris.get(0).replace(el,old+1);
+				    	A=false;
+				  } 
 				}
+				if (A){
+					Map<String,Integer> app =new HashMap<String,Integer>();
+				    app.put(el, 1);
+				    ris.add(app);
+				}
+			  }
 			}
-		}
-   	return count;
+   	
+   	return ris;
+   }
+   
+
+	private List<Map<List<Integer>,Integer>> count_intv(List<List<Integer>> dataSet, int s) {
+	   List<Map<List<Integer>,Integer>> ris = new ArrayList <Map<List<Integer>,Integer>>();   
+   	if (s<this.n-1 | s>0 | this.n>0) {
+			if(s==0)s=this.n-1;
+			for(int i=0;i<=s;i++) {
+				List<Integer> el=dataSet.get(i).subList(1, 3);
+                boolean A = true;
+				if (!ris.isEmpty() & ris.size()>1) {
+					for( int j=0;j<=ris.size()-1;j++) {
+				   	if(ris.get(j).containsKey(el)) {
+				    	int old = ris.get(j).get(el);
+				    	ris.get(j).replace(el,old+1);
+				    	A=false;
+				   	  }
+				  	}
+				  } else if (!ris.isEmpty() & ris.size()==1) {
+				  if(ris.get(0).containsKey(el)) {
+				    	int old = ris.get(0).get(el);
+				    	ris.get(0).replace(el,old+1);
+				    	A=false;
+				  } 
+				}
+				if (A){
+					Map<List<Integer>,Integer> app =new HashMap<List<Integer>,Integer>();
+				    app.put(el, 1);
+				    ris.add(app);
+				}
+			  }
+			}
+   	
+   	return ris;
    }
    
    private int sum(List<Integer> dataSet, int s) {

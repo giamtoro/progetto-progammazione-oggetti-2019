@@ -20,10 +20,10 @@ public abstract class Data_set {
      
 	public Data_set(List<Data_Model> data,String[] attribute_data) {
 		super();
-		if(!data.isEmpty()) {
+		if(!data.isEmpty() & attribute_data.length==0) {
 			this.Data = data;
 		    this.Attribute_Data = attribute_data;
-		}
+		} //else throw new throw
 		
 	}
 	
@@ -102,7 +102,7 @@ public abstract class Data_set {
 				}
 			}
 		}
-		this.setD_str(d_str);
+		this.setD_str(d_str_tmp);
 		this.setD_int(d_int_tmp);
 		return ris;
 	}
