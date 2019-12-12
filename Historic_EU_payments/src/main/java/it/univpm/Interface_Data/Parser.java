@@ -1,23 +1,20 @@
 package it.univpm.Interface_Data;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,6 +28,7 @@ import it.univpm.Model.Data_Model;
 @Component("Parser")
 public class Parser extends Data_set{
 	 private final  static String COMMA_DELIMITER = "\\t";
+	 private final  static String Cer = "if you are not automatically redirected";
 	 private final  static String Browser = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
 	 
 	 private String Url = new String();
@@ -84,12 +82,14 @@ public class Parser extends Data_set{
 		 return data;
 	}
 	
-	public void load_file(String url ,String file_data, String[] dir_attribute , 
+	protected void load_file(String url ,String file_data, String[] dir_attribute , 
 			String item_attribute, String item, String attribute_return)   {
 
 	     if(!url.isEmpty() && !file_data.isEmpty()) {
+	    	 String er = new String();
 			 try {
 				 String data = url_json(url);
+				 er=data;
 				 JSONObject obj = (JSONObject)JSONValue.parseWithException(data);
 				 int i =1;
 				 boolean T = true;
@@ -125,23 +125,20 @@ public class Parser extends Data_set{
 					 }
 				 }
 			 } catch (ParseException e) {
-				  e.printStackTrace();//
+				  if(er.substring(490,529).contentEquals(Cer)) {
+					  System.out.println(e.getMessage());//
+				  }
 			 } catch (Exception e) {
-			     e.printStackTrace();//
+				 System.out.println(e.getMessage());//
 			 }
 			 
 	     }
 		   
    }
 			   
-	@SuppressWarnings("unused")
 	private static void download(String url, String fileName) throws Exception {
-		if ( Files.notExists(Paths.get(fileName))) {
-			final String folder = System.getProperty("user.dir");
-			File D =  new File(folder,fileName);
-		}
 		try (InputStream in = URI.create(url).toURL().openStream()) {
-	        Files.copy(in, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+	        Files.copy(in, Paths.get(fileName));
 	    } 
 	} 
 	
@@ -185,9 +182,9 @@ public class Parser extends Data_set{
 			   }
 			if(i!=1)stream.close();
 		    } catch ( IOException e) {
-				e.printStackTrace();
+		    	System.out.println(e.getMessage());
 		    } catch ( java.lang.NumberFormatException b) {
-		    	b.printStackTrace();
+		    	System.out.println(b.getMessage());
 		    }
 		}
 		return temp;

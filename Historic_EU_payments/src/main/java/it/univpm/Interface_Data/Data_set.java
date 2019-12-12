@@ -23,15 +23,13 @@ public abstract class Data_set {
 		if(!data.isEmpty() & attribute_data.length==0) {
 			this.Data = data;
 		    this.Attribute_Data = attribute_data;
-		} //else throw new throw
+		} 
 		
 	}
 	
 	public Data_set() {
 	   this.Data = new ArrayList<Data_Model>();
 	   this.Attribute_Data = new String[]{};
-		
-		
 	}
 	
 	

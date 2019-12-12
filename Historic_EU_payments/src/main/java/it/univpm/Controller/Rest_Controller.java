@@ -36,6 +36,11 @@ public class Rest_Controller {
 		return d;
 	}
 	
+	@RequestMapping(value = "/get_metadata", method = RequestMethod.GET)
+	public String[]  metadata() {
+		return data.get_metadata();
+	}
+	
 	@RequestMapping(value = "/set_filtered", method = RequestMethod.POST)
 	public int  set(@RequestBody Data_Model in) {
 		return data.set_filtered_data(in);
@@ -46,7 +51,7 @@ public class Rest_Controller {
 		return data.filtered_data_tmp(in);
 	}
 	
-	@RequestMapping(value = "/get_data/{Mode}", method = RequestMethod.POST)
+	@RequestMapping(value = "/get_data/{Mode}", method = RequestMethod.GET)
 	public List<Data_Model> get_data(@PathVariable String Mode) {
 		if (Mode.contains("All"))return data.all_data() ;
 		else if (Mode.contains("Filtered"))return data.filtered_data();

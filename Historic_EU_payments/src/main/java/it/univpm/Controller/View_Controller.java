@@ -61,6 +61,11 @@ public class View_Controller {
 	public List<Data_Model> all_data() {
 			return  this.D.getData();
 	}
+	
+	@Bean
+	public String[] get_metadata() {
+			return  this.D.getAttribute_Data();
+	}
 
 	
 	public Map<String, Map<String, ?>> all_data_Model() {

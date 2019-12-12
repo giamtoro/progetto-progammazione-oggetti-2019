@@ -28,21 +28,16 @@ public class Probability_Model  extends Data_set{
 			this.data=get_data(Data, in);
 			this.filter=in;
 			this.n=this.data.size();
-			
-	       
 		}
 		
 	 public Probability_Model( List<Data_Model> Data,String[] attribute ) {
 			super(Data,attribute);
 			this.n=0;
-			
-	       
 		}
 		
-		public Probability_Model() {
+	public Probability_Model() {
 			super();
 			this.n=0;
-
 		}
 	
 	public int getN() {
@@ -100,6 +95,14 @@ public class Probability_Model  extends Data_set{
 	        		app.put("max", intv_M);
 	        		ris.put(at, app);
 	        		i++;
+	        	} else if(at.contentEquals("Standard_Deviation_of_annual_expenditure")) {
+	        		Map<String,Integer> app =new HashMap<String,Integer>();
+	        		app.put("mean", (int)this.mean(d_set.get(j), 0));
+	        		app.put("min", (int)this.min(d_set.get(j), 0));
+	        		app.put("max", (int)this.max(d_set.get(j), 0));
+	        		app.put("std", (int)this.std(d_set.get(j), 0));
+	        		app.put("count", getN());
+	        		ris.put(at, app);
 	        	} else if (j>=2){
 	        		Map<String,Integer> app =new HashMap<String,Integer>();
 	        		app.put("mean", (int)this.mean(d_set.get(j), 0));
@@ -275,7 +278,7 @@ public class Probability_Model  extends Data_set{
 		int sum = sum(dataSet,s);
 		if (s<this.n-1 | s>0 | this.n>0) {
 			if(s==0)s=this.n-1;
-		 mean=sum/s;
+		 mean=Math.abs(sum)/s;
 		}
 		return mean;
 	}
