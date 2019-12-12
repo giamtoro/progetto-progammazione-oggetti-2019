@@ -9,10 +9,12 @@ import java.util.Map;
 
 import it.univpm.Model.Data_Model;
 
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
@@ -78,7 +80,7 @@ public class View_Controller {
 	
 	public int  set_filtered_data(Data_Model in) {
 		this.F=new Probability_Model(this.D.getData(),this.D.getAttribute_Data(),in);
-		if (!in.equals(new Data_Model()) | this.F.getN()>1) {
+		if (!in.equals(new Data_Model()) | this.F.getN()>1 |!(this.D.getData().size()==this.F.get_Data().size()) ) {
 			return  this.F.getN();
 		} if(this.F.getN() ==1) new ResponseStatusException(HttpStatus.LENGTH_REQUIRED);
 		else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -100,7 +102,7 @@ public class View_Controller {
 
 	public List<Data_Model> filtered_data_tmp(Data_Model in){
 		List<Data_Model> d=this.D.set_Model(in);
-		if (!in.equals(new Data_Model()) | !this.D.getData().isEmpty()) {
+		if (!in.equals(new Data_Model()) | !this.D.getData().isEmpty() |!(this.D.getData().size()==d.size()) ) {
 			return  d;
 		} else throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
@@ -126,6 +128,28 @@ public class View_Controller {
 		return ret;
 	}
 	
+    public Boolean control_model(String param) {
+    	Boolean T =true;
+    	if(!param.contentEquals("")) {
+    		JSONObject obj = null;
+    		try {
+    			obj = (JSONObject) JSONValue.parseWithException(param);
+    			for(String at :D.getAttribute_Data()) {
+    				if (obj.containsKey(at) & T) {
+    					T=true;
+    				} else T=false;
+    			}
+    		} catch (ParseException e) {
+    			System.out.println(e.getMessage());
+    			T=false;
+    		} catch (Exception e) {
+				 System.out.println(e.getMessage());
+				 T=false;
+			}
+    		
+    	}
+		return T;
+    }
 
 	
 

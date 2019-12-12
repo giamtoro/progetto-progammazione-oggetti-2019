@@ -22,9 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 public class Rest_Controller {
-	
-	static final String[] D_A = new String[] {};
-	
+
 	@Autowired
 	View_Controller data;
 	
