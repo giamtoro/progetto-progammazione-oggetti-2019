@@ -3,10 +3,11 @@ package it.univpm.Historic_EU_payments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** 
- * 
- *  @author Gian Marco Troni
- * 
+/**
+ * quasta  classe del main
+ * @author gianmarco troni
+ * @version 1.4
+ *
  */
 
 @SpringBootApplication(scanBasePackages = "it.univpm")

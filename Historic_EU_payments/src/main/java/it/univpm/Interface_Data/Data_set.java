@@ -9,8 +9,17 @@ import it.univpm.Model.Data_Model;
 
 
 /** 
-
+* quasta  classe è astratta contie il dataset principale e
+* gli atributi
+* la quale vandono utliazii per spacchetare per tipi i
+* del mdello di dati e la funzione del filto dei dato
+* clssi estese {@link Parser} ,
+* {@link Probability_Model} 
+*  
+*  @see       Data_set
+*  @see       Data_Model
  * @author gianmarco troni
+ * @version 1.4
  *
  */
 
@@ -23,13 +32,14 @@ public abstract class Data_set {
     private List<Data_Model> Data = new ArrayList<Data_Model>();// datase completo
     private String[] Attribute_Data = new String[]{};//atributi dei meta dati
     
+
     /** 
-     * @param private List<List<Integer>> d_int
-     * @param private List<List<String>> d_str
-     * @param private List<Data_Model> Data
-     * @param  private String[] Attribute_Data
+     * Class constructor.
+     * costruttore del dataset principale
+     * di una  classe astratta
+     * @param  attribute_data atributi dataset
+     * @param  data tutto il datset
      */
-     
 	public Data_set(List<Data_Model> data,String[] attribute_data) {
 		super();
 		if(!data.isEmpty() & attribute_data.length==0) {
@@ -38,105 +48,107 @@ public abstract class Data_set {
 		} 
 		
 	}
-	/** 
-     * costruttore del dataset principale
-     * di una  classe astratta
-     * @param String[] attribute_data
-     * @param List<Data_Model> data
-     */
 	
+	/** 
+     * Class constructor.
+     * costrittore dati vuoti
+     */
 	public Data_set() {//settagio dati vuoti
 	   this.Data = new ArrayList<Data_Model>();
 	   this.Attribute_Data = new String[]{};
 	}
-	 /** 
-     * costruttore dati vuoti
+	 
+	
+	/** 
+	 * dati tipo int setter
+     * @param d_int dati modello int
      */
-	
-	
 	protected void setD_int(List<List<Integer>> d_int) {
 		this.d_int = d_int;
 	}
+    
 	/** 
-	 * @param List<List<Integer>> d_int
-     * dati tipo int setter
+	 * dati tipo string setter
+     * @param d_str dati modello string
      */
-
 	protected void setD_str(List<List<String>> d_str) {
 		this.d_str = d_str;
 	}
+    
 	/** 
-	 * @param List<List<String>> d_str
-     * dati tipo string setter
+	 * dataset setter
+     * @param data tutto il dataset 
      */
-
 	protected void setData(List<Data_Model> data) {
 		Data = data;
 	}
-	/** 
-	 * @param List<Data_Model> data
-     * dataset setter
-     */
+
 	
+	/** 
+	 * attributi del dataset setter
+     * @param attribute_Data atribui del dataset
+     */
 	protected void setAttribute_Data(String[] attribute_Data) {
 		Attribute_Data = attribute_Data;
 	}
-	/** 
-	 * @param String[] attribute_Data
-     *  attributi del dataset setter
-     */
 	
+	/** 
+	 * dati tipo int getter
+     * @return dati tipo int
+     */
 	public List<List<Integer>> getD_int() {
 		return d_int;
 	}
-	 /** 
-     * dati tipo int getter
-     * @return List<List<Integer>>
+
+	/** 
+	 * dati tipo String getter
+     * @return dati tipo String
      */
-
-
 	public List<List<String>> getD_str() {
 		return d_str;
 	}
-	 /** 
-     * dati tipo String getter
-     * @return List<List<String>>
+
+	/** 
+	 * attributi dataset getter
+     * @return atributi
      */
-
-
 	public String[] getAttribute_Data() {
 		return Attribute_Data;
 	}
+    
 	/** 
-     * attributi dataset getter
-     * @return String[]
+	 * dataset getter
+     * @return tutto il dataset
      */
-
 	public List<Data_Model> getData() {
 		return Data;
 	}
-	/** 
-     * dataset getter
-     * @return List<Data_Model>
-     */
 
-    
-	abstract public  Map<String,Map<String,?>> get_Model();
-	/** 
-     * ritorna modello dei dati
+    /** 
+     * ritorna statitiche dei dati
      * dichiarazione funzione astratta
-     * @return Map<String, Map<String, ?>>
+     * @return mappa dell statistiche al ogetto che chimato
      */
-
+	abstract public  Map<String,Map<String,?>> get_Model();
 	
-	abstract public  List<Data_Model> set_Model(Data_Model filter);
+
 	/** 
      * ritorna dati filtrati
      * dichiarazione funzione astratta
-     * @return List<Data_Model>
+     * @param filter modello che funziona da filtro
+     * @return lista del modello del dato al ogetto che chimato
      */
+	abstract public  List<Data_Model> set_Model(Data_Model filter);
 	
 	
+	/** 
+     * costruttore del dataset principale
+     * dei dati int e string
+     * funzione di una  classe astratta
+     * @param in modello che funziona da filtro
+     * @param data dati da filtrare
+     * @return lista modello fitrato
+     */
 	protected List<Data_Model> get_data (List<Data_Model> data ,Data_Model in ) {
 		List<Data_Model> ris = new ArrayList<Data_Model>();//mappa che ritorno
 		List<List<Integer>> d_int_tmp = new ArrayList<List<Integer>>();//mappa appogio data int
@@ -144,6 +156,7 @@ public abstract class Data_set {
 		if(!data.isEmpty()) {
 			for (Data_Model g :data) {
 				if(in.equals(g) | in.equals(new Data_Model() )) {//filtro dati 
+					// dati string
 		    		List<String> s = new ArrayList<String>();
 		    		s.add(g.getCountry());
 			    	s.add(g.getNUTS1_ID());
@@ -151,6 +164,7 @@ public abstract class Data_set {
 			    	s.add(g.getNUTS2_name());
 			    	s.add(g.getFund());
 			    	d_str_tmp.add(s);
+			    	// dati int + int[]
 	    	    	List<Integer> d = new ArrayList<Integer>();
 	    	    	d.add(g.getYear());
 			    	d.add(g.getProgramming_Period()[0]);
@@ -168,13 +182,7 @@ public abstract class Data_set {
 		this.setD_int(d_int_tmp);//setto dati tipo String
 		return ris;
 	}
-	/** 
-     * costruttore del dataset principale
-     * di una  classe astratta
-     * @param Data_Model in
-     * @param List<Data_Model> data
-     * @return List<Data_Model>
-     */
+	
 	
 	
 	

@@ -1,5 +1,7 @@
 # PROGETTO DI PROGAMMAZIONE AD OGGETTI
 
+quasto prgetto maven è stato ftoo con JDK 11
+
 ## Indice
 
 - Settare il dataset con la chiamta **GET  "/set_data"** nei paramitri vine preso Url.
@@ -18,9 +20,10 @@
 quasta chiamta viene utilizata per settare il dataset con il metodo GET dando come parametri KEY ci deve essere Url.
 come ritorno ridarra i metadata del dataset inserito.
 se i dati già inseri gli risetta.
+quata finzione è la pria ad essere chamta perchè carica i dati
 
->test
-localhost:8080/set_data?Url=http://data.europa.eu/euodp/data/api/3/action/package_showid=eu-cohesion-policy-historic-eu-payments-regionalised-and-modelled
+> test
+ localhost:8080/set_data?Url=http://data.europa.eu/euodp/data/api/3/action/package_showid=eu-cohesion-policy-historic-eu-payments-regionalised-and-modelled
 
 {
     "NUTS2_ID": {
@@ -74,6 +77,9 @@ localhost:8080/set_data?Url=http://data.europa.eu/euodp/data/api/3/action/packag
 -----
 
 ritorna il metadata del dataset
+
+> test
+ localhost:8080/get_metadata
 
 {
     "NUTS2_ID": {
@@ -152,7 +158,7 @@ questa chiamta setta il dato filtrato con un body json ridando il numero di elem
 
 -----
 
-quasta funzione si utiliza per provare con un body json dei se il filtrodel dataset se il dataset è vuoto e il body json parametri sono vuoti del modello ridarra l'errore "non foud" e  invece se quei parametri non corrispondono al modello  ridarra l'errore "non foud".
+quasta funzione si utiliza per provare con un body json dei se il filtrodel dataset se il dataset è vuoto e il body json parametri sono tutti vuoti del modello ridarra l'errore "non foud" e  invece se quei parametri non corrispondono al modello e anoo un valore diverso dal vuoto ridarra l'errore "non foud".
 
 >test
 {
@@ -186,7 +192,7 @@ questa chiamta fa vedere il dataset dove Mode
 | All      | tutto il data set       |           "/get_data/All"      |
 | Filtered | il dataset filtrato     |       "/get_data/Filtered"     |
 
->test localhost:8080/get_data/All
+> test localhost:8080/get_data/All
 
 [
     {
@@ -208,7 +214,7 @@ questa chiamta fa vedere il dataset dove Mode
 
 ritorna  tutti i dati
 
->test localhost:8080/get_model/Filtered
+> test localhost:8080/get_model/Filtered
 
 [
     {
@@ -235,7 +241,7 @@ ritorna i dati filtrati
 -----
 
 questa chiamta fa vedere il modello dove Mode
->Mode
+> Mode
 
 | Mode     | visulizione data        |           path                 |
 | ---------|-------------------------|--------------------------------|
@@ -250,15 +256,15 @@ con la possibilità di scgliere la statistica da  vedere tramite il parametro
 | ""                    |  modelo di tutti metadati del dato                 |
 | parametro del modello |modello del paramtro scelto del metadati del dato   |
 
->test localhost:8080/get_model/All?Field=
+> test localhost:8080/get_model/All?Field=
 
 ritorna le statitiche di tutti i dati
 
->test localhost:8080/get_model/Filtered?Field=
+> test localhost:8080/get_model/Filtered?Field=
 
 ritorna le statitiche di tutti i dati
 
->test localhost:8080/get_model/All?Field=Year
+> test localhost:8080/get_model/All?Field=Year
 
 {
     "Year": {
@@ -270,7 +276,7 @@ ritorna le statitiche di tutti i dati
     }
 }
 
->test localhost:8080/get_model/Filtered?Field=Year
+> test localhost:8080/get_model/Filtered?Field=Year
 
 {
     "Year": {
