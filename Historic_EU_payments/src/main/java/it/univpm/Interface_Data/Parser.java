@@ -338,8 +338,7 @@ public class Parser extends Data_set{
      */
 	@Override
 	public  List<Data_Model> set_Model(Data_Model filter) {
-		Probability_Model app = new Probability_Model(this.getData(),this.getAttribute_Data(),filter);
-		return app.get_Data();
+		return this.get_data(this.getData(), filter);
 
 	}
 	
